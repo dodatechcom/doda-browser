@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../theme.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font: 13px/1.5 system-ui, -apple-system, sans-serif;
+      background: #1a1a2e; color: #eaeaea;
+      padding: 10px;
+      display: flex; flex-direction: column; height: 100vh;
+    }
+    h2 { font-size: 13px; color: #e94560; margin-bottom: 8px; }
+
+    .repl-output {
+      flex: 1; overflow-y: auto;
+      background: #16213e; border: 1px solid #0f3460;
+      border-radius: 4px; padding: 8px; margin-bottom: 8px;
+      font-family: 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 11px; line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .repl-output .entry { margin-bottom: 4px; }
+    .repl-output .input { color: #16c79a; }
+    .repl-output .output { color: #eaeaea; }
+    .repl-output .error { color: #e94560; }
+    .repl-output .info { color: #555; }
+
+    .repl-input-row {
+      display: flex; gap: 4px;
+    }
+    .repl-input-row textarea {
+      flex: 1; background: #16213e; border: 1px solid #0f3460;
+      border-radius: 4px; padding: 6px 8px; color: #eaeaea;
+      font-family: 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 12px; resize: none; min-height: 44px; max-height: 120px;
+    }
+    .repl-input-row textarea:focus { outline: none; border-color: #e94560; }
+    .repl-input-row button {
+      padding: 6px 12px; background: #e94560; color: #fff;
+      border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
+      font-size: 12px; align-self: flex-end;
+    }
+    .repl-input-row button:hover { background: #d63850; }
+
+    .repl-toolbar {
+      display: flex; gap: 6px; margin-bottom: 8px;
+    }
+    .repl-toolbar button {
+      padding: 3px 8px; border: 1px solid #0f3460; background: #16213e;
+      color: #888; border-radius: 3px; cursor: pointer; font-size: 10px;
+    }
+    .repl-toolbar button:hover { border-color: #e94560; color: #eaeaea; }
+    .repl-help {
+      font-size: 10px; color: #555; margin-bottom: 8px;
+    }
+    .repl-help kbd {
+      background: #0f3460; padding: 1px 4px; border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+  <h2>⊞ Scripting REPL</h2>
+  <div class="repl-help">Shift+Enter to evaluate. <kbd>Esc</kbd> clear input. <kbd>↑</kbd> history.</div>
+
+  <div class="repl-toolbar">
+    <button id="btnClear">Clear</button>
+    <button id="btnDoc">document</button>
+    <button id="btnWin">window</button>
+    <button id="btnSel">$()</button>
+    <button id="btnFetch">fetch()</button>
+  </div>
+
+  <div id="replOutput" class="repl-output">
+    <div class="entry info">// Doda Scripting REPL — evaluate JavaScript in page context</div>
+    <div class="entry info">// Type code and press Shift+Enter to run</div>
+  </div>
+
+  <div class="repl-input-row">
+    <textarea id="replInput" placeholder="document.title" rows="2"></textarea>
+    <button id="btnEval">▶</button>
+  </div>
+
+  <script src="repl.js"></script>
+</body>
+</html>

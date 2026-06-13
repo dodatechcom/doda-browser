@@ -1,0 +1,18 @@
+[package]
+name = "doda-identity-wallet"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+didkit = { version = "0.4", optional = true }
+rusqlite = { version = "0.31", features = ["bundled"] }
+uuid = { version = "1", features = ["v4"] }
+ed25519-dalek = "2"
+rand = "0.8"
+base64 = "0.22"
+sha2 = "0.10"
+
+[lib]
+name = "doda_identity"

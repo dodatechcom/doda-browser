@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../theme.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font: 13px/1.5 system-ui, -apple-system, sans-serif;
+      background: #1a1a2e; color: #eaeaea;
+      width: 360px; padding: 0;
+    }
+    .header {
+      background: #16213e; padding: 10px 14px;
+      border-bottom: 1px solid #0f3460;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .header h2 { font-size: 13px; color: #e94560; }
+    .btn {
+      padding: 5px 12px; border-radius: 4px; border: none;
+      cursor: pointer; font-size: 12px; font-weight: 600;
+    }
+    .btn-record { background: #e94560; color: #fff; }
+    .btn-record.recording { background: #555; }
+    .btn-play { background: #16c79a; color: #fff; }
+    .btn-play:disabled { background: #0f3460; color: #555; cursor: default; }
+    .btn-danger { background: transparent; border: 1px solid #e94560; color: #e94560; }
+    .btn-secondary { background: #0f3460; color: #888; }
+    .btn-secondary:hover { background: #1a3a6a; }
+    .tabs {
+      display: flex; border-bottom: 1px solid #0f3460;
+    }
+    .tab { flex: 1; padding: 7px; text-align: center; font-size: 11px;
+      cursor: pointer; border-bottom: 2px solid transparent; color: #888; }
+    .tab.active { border-bottom-color: #e94560; color: #fff; }
+    .panel { display: none; padding: 10px 14px; max-height: 340px; overflow-y: auto; }
+    .panel.active { display: block; }
+    .macro-item {
+      padding: 6px 0; border-bottom: 1px solid #0f3460;
+      font-size: 12px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .macro-item .name { font-weight: 600; }
+    .macro-item .meta { font-size: 10px; color: #555; }
+    .macro-item .actions { display: flex; gap: 4px; }
+    .macro-item .actions button {
+      background: none; border: 1px solid #0f3460; border-radius: 3px;
+      color: #888; cursor: pointer; padding: 2px 6px; font-size: 10px;
+    }
+    .macro-item .actions button:hover { border-color: #e94560; color: #e94560; }
+    .step-list { font-size: 11px; padding-left: 12px; margin-top: 6px; }
+    .step-item { padding: 2px 0; color: #555; }
+    .step-item .action { color: #16c79a; }
+    .empty-state { text-align: center; padding: 20px; color: #555; font-size: 12px; }
+    .save-input {
+      display: flex; gap: 6px; margin-top: 8px;
+    }
+    .save-input input {
+      flex: 1; background: #16213e; border: 1px solid #0f3460;
+      border-radius: 4px; padding: 4px 8px; color: #eaeaea; font-size: 12px;
+    }
+    .save-input input:focus { outline: none; border-color: #e94560; }
+    .status-badge {
+      display: inline-block; padding: 2px 6px; border-radius: 3px;
+      font-size: 10px;
+    }
+    .status-badge.recording { background: #e94560; color: #fff; }
+    .status-badge.idle { background: #0f3460; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>⏺ Programmable Browser</h2>
+    <span id="statusBadge" class="status-badge idle">Idle</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="recorder">Recorder</div>
+    <div class="tab" data-tab="macros">Macros</div>
+  </div>
+
+  <!-- Recorder Panel -->
+  <div id="panel-recorder" class="panel active">
+    <div style="margin-bottom:8px;">
+      <p style="font-size:11px;color:#888;">Record clicks, form entries, and navigation on the current page.</p>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <button id="btnRecord" class="btn btn-record">🔴 Record</button>
+      <button id="btnStop" class="btn btn-secondary" disabled>⬛ Stop</button>
+      <button id="btnPlayback" class="btn btn-play" disabled>▶ Play</button>
+    </div>
+    <div style="font-size:11px;color:#888;margin-bottom:4px;">
+      Steps: <span id="stepCount">0</span>
+    </div>
+    <div id="stepList" class="step-list"></div>
+
+    <div id="saveSection" class="save-input" style="display:none;">
+      <input id="macroName" placeholder="Macro name..." value="">
+      <button id="btnSave" class="btn btn-play" style="padding:4px 10px;">Save</button>
+    </div>
+  </div>
+
+  <!-- Macros Panel -->
+  <div id="panel-macros" class="panel">
+    <div id="macroList"></div>
+  </div>
+
+  <script src="recorder.js"></script>
+</body>
+</html>

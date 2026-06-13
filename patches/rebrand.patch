@@ -1,0 +1,45 @@
+# Doda Rebranding Patch Notes
+# Apply after cloning mozilla-central
+
+## Files to modify:
+
+# 1. browser/confvars.sh
+MOZ_APP_BASENAME=Doda
+MOZ_APP_VENDOR=DodaBrowser
+MOZ_APP_NAME=doda
+MOZ_APP_DISPLAYNAME=Doda
+MOZ_APP_UA_NAME=Doda
+MOZ_APP_VERSION=1.0
+
+# 2. browser/branding/official/ (replace all assets)
+# 3. browser/branding/unofficial/ (replace all assets)
+
+# 4. browser/app/profile/firefox.js → sundaram.js
+# Pref changes:
+pref("browser.aboutwelcome.enabled", false);
+pref("datareporting.healthreport.uploadEnabled", false);
+pref("datareporting.policy.dataSubmissionEnabled", false);
+pref("toolkit.telemetry.enabled", false);
+pref("toolkit.telemetry.archive.enabled", false);
+pref("toolkit.telemetry.bhrPing.enabled", false);
+pref("toolkit.telemetry.cachedClientID", "");
+pref("toolkit.telemetry.firstShutdownPing.enabled", false);
+pref("toolkit.telemetry.hybridContent.enabled", false);
+pref("toolkit.telemetry.newProfilePing.enabled", false);
+pref("toolkit.telemetry.prompted", 2);
+pref("toolkit.telemetry.rejected", true);
+pref("toolkit.telemetry.server", "data:,");
+pref("toolkit.telemetry.shutdownPingSender.enabled", false);
+pref("toolkit.telemetry.unified", false);
+pref("toolkit.telemetry.updatePing.enabled", false);
+pref("browser.ping-centre.telemetry", false);
+pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
+pref("browser.newtabpage.activity-stream.telemetry", false);
+pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
+pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false);
+
+# 5. browser/components/about/AppConstants.h
+# Change MOZ_APP_BASENAME, MOZ_APP_VENDOR references
+
+# 6. browser/locales/en-US/browser/branding/
+# Update name, vendor, copyright strings

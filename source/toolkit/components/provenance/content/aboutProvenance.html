@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Trust OS &mdash; Provenance</title>
+  <link rel="stylesheet" href="chrome://provenance/content/aboutProvenance.css" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-brand">
+        <span class="header-icon">&#9650;</span>
+        <div>
+          <h1>Trust OS</h1>
+          <p class="subtitle">Claim extraction, source comparison, and spread analysis</p>
+        </div>
+      </div>
+      <div id="statusBar"></div>
+    </header>
+
+    <nav id="tabs">
+      <button class="tab active" data-tab="claims">Claims</button>
+      <button class="tab" data-tab="compare">Compare Sources</button>
+      <button class="tab" data-tab="spread">Spread Analysis</button>
+      <button class="tab" data-tab="stats">Stats</button>
+    </nav>
+
+    <main>
+      <section id="panel-claims" class="panel active">
+        <div class="panel-header">
+          <h2>Claims</h2>
+          <span class="panel-desc">Factual claims extracted from pages you visit</span>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="claimSearchInput" placeholder="Search claims across all sources...">
+          <button id="claimSearchBtn">Search</button>
+        </div>
+        <div id="claimList" class="results-list"></div>
+      </section>
+
+      <section id="panel-compare" class="panel">
+        <div class="panel-header">
+          <h2>Compare Sources</h2>
+          <span class="panel-desc">See which sources mention the same claim</span>
+        </div>
+        <div class="input-group">
+          <input type="text" id="compareClaimId" placeholder="Enter a claim ID (e.g. claim_a1b2c3d4)">
+          <button id="compareBtn">Compare Sources</button>
+        </div>
+        <div id="compareResult" class="results-list"></div>
+      </section>
+
+      <section id="panel-spread" class="panel">
+        <div class="panel-header">
+          <h2>Spread Analysis</h2>
+          <span class="panel-desc">Track how a claim propagates across domains and sources</span>
+        </div>
+        <div class="input-group">
+          <input type="text" id="spreadClaimId" placeholder="Enter a claim ID">
+          <button id="spreadBtn">Find Spread</button>
+        </div>
+        <div id="spreadResult" class="results-list"></div>
+      </section>
+
+      <section id="panel-stats" class="panel">
+        <div class="panel-header">
+          <h2>Statistics</h2>
+          <span class="panel-desc">Trust OS database overview</span>
+        </div>
+        <div id="statsContent"></div>
+      </section>
+    </main>
+
+    <footer class="help-section">
+      <div class="help-content">
+        <h3>About Trust OS</h3>
+        <p>Trust OS automatically extracts factual claims from pages you visit using a local AI model (Ollama). It tracks claims across different sources, compares how different publications report the same fact, and analyzes how information spreads across the web.</p>
+        <ul>
+          <li><strong>Claims</strong> &mdash; Browse and search all extracted claims with their source URLs and confidence scores</li>
+          <li><strong>Compare Sources</strong> &mdash; Enter a claim ID to see every source that mentions it, side by side</li>
+          <li><strong>Spread Analysis</strong> &mdash; Track how a claim moves across domains over time</li>
+          <li><strong>Stats</strong> &mdash; View total claims extracted and database health</li>
+        </ul>
+        <p class="tagline">&#9733; Unique concept of Doda Browser &mdash; The first browser that helps you verify what's true.</p>
+      </div>
+    </footer>
+  </div>
+  <script src="chrome://provenance/content/aboutProvenance.js"></script>
+</body>
+</html>

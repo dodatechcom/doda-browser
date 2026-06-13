@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Doda Intelligence Hub</title>
+  <link rel="stylesheet" href="chrome://sundaram/content/aboutDoda.css" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-brand">
+        <span class="header-icon">&#9881;</span>
+        <div>
+          <h1>Doda Intelligence Hub</h1>
+          <p class="subtitle">Unified dashboard for Knowledge Graph, AI, Identity, and Provenance</p>
+        </div>
+      </div>
+      <div id="statsBar"></div>
+    </header>
+
+    <nav id="tabs">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="knowledge">Knowledge Graph</button>
+      <button class="tab" data-tab="ai">AI</button>
+      <button class="tab" data-tab="identity">Identity</button>
+      <button class="tab" data-tab="provenance">Provenance</button>
+    </nav>
+
+    <main>
+      <section id="panel-overview" class="panel active">
+        <div class="panel-header">
+          <h2>Overview</h2>
+          <span class="panel-desc">All your Doda services at a glance</span>
+        </div>
+        <div id="overviewContent"></div>
+      </section>
+
+      <section id="panel-knowledge" class="panel">
+        <div class="panel-header">
+          <h2>Knowledge Graph</h2>
+          <span class="panel-desc">Search across your entire browsing history</span>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="kgSearchInput" placeholder="Search your knowledge graph...">
+          <button id="kgSearchBtn">Search</button>
+        </div>
+        <div id="kgResults" class="results-list"></div>
+      </section>
+
+      <section id="panel-ai" class="panel">
+        <div class="panel-header">
+          <h2>AI Assistant</h2>
+          <span class="panel-desc">Ask questions to your local AI model</span>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="aiChatInput" placeholder="Ask Doda AI...">
+          <button id="aiChatBtn">Chat</button>
+        </div>
+        <div id="aiResponse" class="result-area"></div>
+      </section>
+
+      <section id="panel-identity" class="panel">
+        <div class="panel-header">
+          <h2>Identity Wallet</h2>
+          <span class="panel-desc">Your passwordless identities</span>
+        </div>
+        <div id="identityContent"></div>
+      </section>
+
+      <section id="panel-provenance" class="panel">
+        <div class="panel-header">
+          <h2>Provenance</h2>
+          <span class="panel-desc">Claim tracking and source analysis</span>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="pvSearchInput" placeholder="Search claims...">
+          <button id="pvSearchBtn">Search</button>
+        </div>
+        <div id="pvResults" class="results-list"></div>
+      </section>
+    </main>
+
+    <footer class="help-section">
+      <div class="help-content">
+        <h3>About Doda Intelligence Hub</h3>
+        <p>Doda Intelligence Hub is the command center for all Doda Browser's unique capabilities. It unifies four powerful services into one interface, with a global command palette accessible from any page.</p>
+        <ul>
+          <li><strong>Knowledge Graph</strong> &mdash; Full-text search across every page you've visited, automatically indexed</li>
+          <li><strong>AI Assistant</strong> &mdash; Private, local AI powered by Ollama &mdash; chat, analyze tab content, compare pages, and debate topics</li>
+          <li><strong>Identity Wallet</strong> &mdash; Passwordless login using Ed25519 cryptographic keys stored securely in your browser</li>
+          <li><strong>Provenance (Trust OS)</strong> &mdash; Extract factual claims from pages, compare sources, and track how information spreads</li>
+        </ul>
+        <p><strong>Quick Tips:</strong></p>
+        <ul>
+          <li>Press <strong>Ctrl+K</strong> or <strong>Ctrl+Shift+,</strong> anywhere in the browser to open the Command Palette</li>
+          <li>Visit individual service pages: <code>about:knowledgegraph</code>, <code>about:ai</code>, <code>about:identity</code>, <code>about:provenance</code></li>
+          <li>Make sure Ollama is running (<code>ollama serve</code>) for AI &amp; Provenance features</li>
+        </ul>
+        <p><strong>Doda Support:</strong></p>
+        <ul>
+          <li><a href="https://support.dodatech.com/" target="_blank">Get help with Doda Browser</a></li>
+          <li><a href="https://support.dodatech.com/forum/" target="_blank">Community Forum</a> &mdash; Share ideas and feedback</li>
+          <li><a href="https://dodatech.com" target="_blank">DodaTech.com</a> &mdash; Explore DodaTech products</li>
+        </ul>
+        <p class="tagline">&#9733; Unique concept of Doda Browser &mdash; No other browser gives you memory, identity, truth, and intelligence built in.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="chrome://sundaram/content/aboutDoda.js"></script>
+</body>
+</html>

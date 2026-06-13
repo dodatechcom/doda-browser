@@ -1,0 +1,46 @@
+/* Doda Design Tokens
+   Source of truth for all visual properties.
+   Copy this into each extension's theme file. */
+
+:root {
+  /* Backgrounds */
+  --bg-page: #1a1a2e;
+  --bg-surface: #16213e;
+  --bg-border: #0f3460;
+  --bg-surface-hover: #1a3a6a;
+
+  /* Text */
+  --text-primary: #eaeaea;
+  --text-secondary: #888;
+  --text-muted: #555;
+  --text-white: #fff;
+
+  /* Accents */
+  --accent: #e94560;
+  --accent-hover: #d13d52;
+  --accent-secondary: #16c79a;
+  --accent-warning: #f5a623;
+
+  /* Shadows */
+  --shadow-float: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Typography */
+  --font-ui: system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', 'Cascadia Code', monospace;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+
+  /* Border radius */
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+
+  /* Sizes */
+  --popup-width: 360px;
+  --sidebar-width: 320px;
+}

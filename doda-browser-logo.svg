@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="innerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#1e1b4b" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <!-- Shield shape -->
+  <path d="M 256 30 L 430 120 L 430 260 C 430 360 340 450 256 482 C 172 450 82 360 82 260 L 82 120 Z"
+        fill="url(#shieldGrad)" filter="url(#shadow)"/>
+  <!-- Shield inner border -->
+  <path d="M 256 55 L 405 135 L 405 255 C 405 345 325 425 256 453 C 187 425 107 345 107 255 L 107 135 Z"
+        fill="url(#innerGrad)" stroke="#818cf8" stroke-width="1.5" opacity="0.8"/>
+  <!-- Inner glow -->
+  <circle cx="256" cy="260" r="100" fill="url(#eyeGlow)"/>
+  <!-- Eye shape (watching from within the shield) -->
+  <path d="M 160 260 Q 256 180 352 260 Q 256 340 160 260 Z" fill="#f1f5f9"/>
+  <!-- Iris -->
+  <circle cx="256" cy="260" r="40" fill="#60a5fa"/>
+  <circle cx="256" cy="260" r="40" fill="none" stroke="#1e1b4b" stroke-width="1.5" opacity="0.3"/>
+  <!-- Pupil -->
+  <circle cx="256" cy="260" r="18" fill="#0f172a"/>
+  <!-- Eye highlight -->
+  <ellipse cx="246" cy="248" rx="12" ry="8" fill="#ffffff" opacity="0.9" transform="rotate(-25 246 248)"/>
+  <ellipse cx="246" cy="248" rx="7" ry="4" fill="#ffffff" transform="rotate(-25 246 248)"/>
+  <!-- Upper lid -->
+  <path d="M 160 260 Q 256 175 352 260" fill="none" stroke="#1e1b4b" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Shield highlight line -->
+  <path d="M 160 95 L 256 55 L 352 95" fill="none" stroke="#a5b4fc" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+</svg>

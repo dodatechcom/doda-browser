@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Contextual AI</title>
+  <link rel="stylesheet" href="chrome://aiengine/content/aboutAI.css" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-brand">
+        <span class="header-icon">&#9670;</span>
+        <div>
+          <h1>Contextual AI</h1>
+          <p class="subtitle">Private local intelligence powered by Ollama</p>
+        </div>
+      </div>
+      <div id="statusBar"></div>
+    </header>
+
+    <nav id="tabs">
+      <button class="tab active" data-tab="chat">Chat</button>
+      <button class="tab" data-tab="tabcontext">Tab Context</button>
+      <button class="tab" data-tab="crosspage">Cross-Page</button>
+      <button class="tab" data-tab="debate">Debate</button>
+    </nav>
+
+    <main>
+      <section id="panel-chat" class="panel active">
+        <div class="panel-header">
+          <h2>Chat</h2>
+          <span class="panel-desc">General-purpose conversation with your local AI</span>
+        </div>
+        <div id="chatMessages" class="msg-container"></div>
+        <div class="input-row">
+          <textarea id="chatInput" placeholder="Ask anything..." rows="2"></textarea>
+          <button id="chatSendBtn">Send</button>
+        </div>
+      </section>
+
+      <section id="panel-tabcontext" class="panel">
+        <div class="panel-header">
+          <h2>Tab Context</h2>
+          <span class="panel-desc">Analyze the content of your currently active tab</span>
+        </div>
+        <div class="input-group">
+          <textarea id="tabPrompt" placeholder="What do you want to know about this page?" rows="2"></textarea>
+          <button id="tabAnalyzeBtn">Analyze Tab</button>
+        </div>
+        <div id="tabResult" class="result-area"></div>
+      </section>
+
+      <section id="panel-crosspage" class="panel">
+        <div class="panel-header">
+          <h2>Cross-Page Analysis</h2>
+          <span class="panel-desc">Compare or summarize content across multiple pages</span>
+        </div>
+        <div class="input-group">
+          <textarea id="crossPages" placeholder="Paste page URLs or content, one per section..." rows="3"></textarea>
+          <textarea id="crossPrompt" placeholder="What comparison or summary do you want?" rows="2"></textarea>
+          <button id="crossAnalyzeBtn">Compare</button>
+        </div>
+        <div id="crossResult" class="result-area"></div>
+      </section>
+
+      <section id="panel-debate" class="panel">
+        <div class="panel-header">
+          <h2>Debate</h2>
+          <span class="panel-desc">Explore a topic from multiple perspectives</span>
+        </div>
+        <div class="input-group">
+          <input type="text" id="debateTopic" placeholder="Topic to debate">
+          <textarea id="debatePerspectives" placeholder="Perspectives (one per line, e.g. pro, con, neutral)..." rows="3"></textarea>
+          <button id="debateStartBtn">Start Debate</button>
+        </div>
+        <div id="debateResult" class="result-area"></div>
+      </section>
+    </main>
+
+    <footer class="help-section">
+      <div class="help-content">
+        <h3>About Contextual AI</h3>
+        <p>Contextual AI runs a large language model locally on your machine via Ollama. All processing stays on your device — nothing is sent to the cloud.</p>
+        <ul>
+          <li><strong>Chat</strong> &mdash; Have a free-form conversation with the AI</li>
+          <li><strong>Tab Context</strong> &mdash; Ask questions about the page you're currently viewing</li>
+          <li><strong>Cross-Page</strong> &mdash; Compare or summarize information from multiple sources</li>
+          <li><strong>Debate</strong> &mdash; Examine a topic from different viewpoints</li>
+        </ul>
+        <p class="tagline">&#9733; Unique concept of Doda Browser &mdash; Your browser understands the web, not just displays it.</p>
+      </div>
+    </footer>
+  </div>
+  <script src="chrome://aiengine/content/aboutAI.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+[scriptable, uuid(e1f2a3b4-5c6d-7e8f-9a0b-1c2d3e4f5a6b)]
+interface nsIProvenanceService : nsISupports
+{
+  AUTF8String extractClaims(in AUTF8String url, in AUTF8String title, in AUTF8String textContent);
+
+  AUTF8String compareSources(in AUTF8String claimId);
+
+  AUTF8String findSpread(in AUTF8String claimId, in unsigned long maxResults);
+
+  AUTF8String searchClaims(in AUTF8String query, in unsigned long maxResults);
+
+  AUTF8String getRecent(in unsigned long maxResults);
+
+  unsigned long getClaimCount();
+
+  void clear();
+};

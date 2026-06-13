@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Passwordless Identity</title>
+  <link rel="stylesheet" href="chrome://identitywallet/content/aboutIdentity.css" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-brand">
+        <span class="header-icon">&#9632;</span>
+        <div>
+          <h1>Passwordless Identity</h1>
+          <p class="subtitle">Your browser owns your identity &mdash; not platforms</p>
+        </div>
+      </div>
+    </header>
+
+    <nav id="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="identities">My Identities</button>
+      <button class="tab" data-tab="permissions">Permissions</button>
+    </nav>
+
+    <main>
+      <section id="panel-dashboard" class="panel active">
+        <div class="panel-header">
+          <h2>Dashboard</h2>
+          <span class="panel-desc">Overview of your cryptographic identities</span>
+        </div>
+        <div id="dashboardContent"></div>
+      </section>
+
+      <section id="panel-identities" class="panel">
+        <div class="panel-header">
+          <h2>My Identities</h2>
+          <span class="panel-desc">Create and manage your Ed25519 cryptographic identities</span>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="identityName" placeholder="e.g. Personal, Work, Gaming">
+          <button id="createIdentityBtn">+ Create Identity</button>
+        </div>
+        <div id="identityList" class="results-list"></div>
+      </section>
+
+      <section id="panel-permissions" class="panel">
+        <div class="panel-header">
+          <h2>Site Permissions</h2>
+          <span class="panel-desc">Sites that have been granted access to your identities</span>
+        </div>
+        <div id="permissionList" class="results-list"></div>
+      </section>
+    </main>
+
+    <footer class="help-section">
+      <div class="help-content">
+        <h3>About Passwordless Identity</h3>
+        <p>Passwordless Identity uses Ed25519 cryptographic key pairs to let you log into websites without passwords. Your private keys never leave your device &mdash; they are stored securely in the browser's NSS certificate store.</p>
+        <ul>
+          <li><strong>Dashboard</strong> &mdash; View your identity count and granted permissions at a glance</li>
+          <li><strong>My Identities</strong> &mdash; Create named identities, each with its own cryptographic key pair. Share your DID with sites that support passwordless login</li>
+          <li><strong>Permissions</strong> &mdash; Review and revoke which sites have access to your identities</li>
+        </ul>
+        <p class="tagline">&#9733; Unique concept of Doda Browser &mdash; Your identity is yours, not a platform's database entry.</p>
+      </div>
+    </footer>
+  </div>
+  <script src="chrome://identitywallet/content/aboutIdentity.js"></script>
+</body>
+</html>

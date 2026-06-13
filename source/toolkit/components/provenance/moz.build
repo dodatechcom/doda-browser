@@ -1,0 +1,28 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+XPIDL_SOURCES += [
+    "nsIProvenanceService.idl",
+]
+XPIDL_MODULE = "provenance"
+
+EXPORTS += [
+    "Provenance.h",
+]
+
+UNIFIED_SOURCES += [
+    "Provenance.cpp",
+]
+
+EXTRA_JS_MODULES += [
+    "Provenance.sys.mjs",
+    "ProvenanceChild.sys.mjs",
+    "ProvenanceParent.sys.mjs",
+]
+
+XPCOM_MANIFESTS += ["components.conf"]
+
+JAR_MANIFESTS += ["jar.mn"]
+
+FINAL_LIBRARY = "xul"

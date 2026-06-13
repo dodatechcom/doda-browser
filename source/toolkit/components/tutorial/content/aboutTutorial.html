@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Doda Browser — Getting Started</title>
+  <link rel="stylesheet" href="chrome://tutorial/content/aboutTutorial.css" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-brand">
+        <h1>Doda Browser</h1>
+        <p class="subtitle">Getting Started Guide &mdash; Your browser, reimagined.</p>
+      </div>
+    </header>
+
+    <div class="notice">
+      <strong>&#9733; Welcome to Doda!</strong> No other browser gives you built-in AI, knowledge graph, passwordless identity, and provenance tracking. This guide explains everything you can do.
+    </div>
+
+    <nav id="sections">
+      <a href="#overview" class="nav-link active">Overview</a>
+      <a href="#knowledgegraph" class="nav-link">Knowledge Graph</a>
+      <a href="#ai" class="nav-link">Contextual AI</a>
+      <a href="#identity" class="nav-link">Passwordless Identity</a>
+      <a href="#provenance" class="nav-link">Trust OS</a>
+      <a href="#doda" class="nav-link">Doda Intelligence Hub</a>
+      <a href="#ollama" class="nav-link">Setting Up Ollama</a>
+      <a href="#tips" class="nav-link">Tips &amp; Shortcuts</a>
+    </nav>
+
+    <main>
+      <section id="overview" class="card-section">
+        <h2>Overview</h2>
+        <p>Doda Browser is a privacy-hardened Firefox fork with four unique native capabilities built directly into the browser. No extensions, no cloud services &mdash; everything runs locally on your machine.</p>
+        <div class="feature-grid">
+          <div class="feature-card" onclick="document.getElementById('knowledgegraph').scrollIntoView({behavior:'smooth'})">
+            <div class="feature-icon" style="color:#3b82f6;">&#9673;</div>
+            <div class="feature-title">Knowledge Graph</div>
+            <div class="feature-desc">Full-text search across every page you have ever visited</div>
+          </div>
+          <div class="feature-card" onclick="document.getElementById('ai').scrollIntoView({behavior:'smooth'})">
+            <div class="feature-icon" style="color:#a855f7;">&#9670;</div>
+            <div class="feature-title">Contextual AI</div>
+            <div class="feature-desc">Private local AI for chat, tab analysis, cross-page comparison, and debate</div>
+          </div>
+          <div class="feature-card" onclick="document.getElementById('identity').scrollIntoView({behavior:'smooth'})">
+            <div class="feature-icon" style="color:#22c55e;">&#9632;</div>
+            <div class="feature-title">Passwordless Identity</div>
+            <div class="feature-desc">Cryptographic identities to log into sites without passwords</div>
+          </div>
+          <div class="feature-card" onclick="document.getElementById('provenance').scrollIntoView({behavior:'smooth'})">
+            <div class="feature-icon" style="color:#f59e0b;">&#9650;</div>
+            <div class="feature-title">Trust OS (Provenance)</div>
+            <div class="feature-desc">Extract, compare, and track factual claims across the web</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="knowledgegraph" class="card-section">
+        <h2>Knowledge Graph <span class="badge">about:knowledgegraph</span></h2>
+        <p>The Knowledge Graph automatically indexes every page you visit. It uses SQLite FTS5 full-text search, so you can find pages by content, not just by title or URL.</p>
+
+        <h3>How It Works</h3>
+        <ul>
+          <li>Every page you visit is automatically indexed &mdash; title, URL, domain, and full page content</li>
+          <li>You can search using SQLite FTS5 syntax: keywords, phrases in quotes, or partial matches</li>
+          <li>Results show the page title, URL, visit date, and a snippet of matching content</li>
+        </ul>
+
+        <h3>Tabs Explained</h3>
+        <table>
+          <tr><td><strong>Search</strong></td><td>Enter a query to search across all indexed pages. Use quotes for exact phrases. Supports FTS5 syntax like <code>NEAR</code>, <code>AND</code>, <code>OR</code>, and wildcards.</td></tr>
+          <tr><td><strong>Recent</strong></td><td>Shows your most recently visited pages in reverse chronological order. Click a title to navigate to the page.</td></tr>
+          <tr><td><strong>Stats</strong></td><td>View total page count and clear all indexed data if needed.</td></tr>
+        </table>
+
+        <h3>Pro Tips</h3>
+        <ul>
+          <li>The index builds automatically as you browse &mdash; no manual setup needed</li>
+          <li>Your data stays local in <code>knowledgegraph.sqlite</code> in your profile directory</li>
+          <li>Use the Knowledge Graph to find that article you read weeks ago by searching a phrase you remember</li>
+        </ul>
+      </section>
+
+      <section id="ai" class="card-section">
+        <h2>Contextual AI <span class="badge">about:ai</span></h2>
+        <p>Contextual AI runs a large language model locally on your machine via <strong>Ollama</strong>. All processing stays on your device &mdash; nothing is sent to the cloud.</p>
+
+        <h3>Tabs Explained</h3>
+        <table>
+          <tr><td><strong>Chat</strong></td><td>Free-form conversation with your local AI. Type a message and press Enter (Shift+Enter for new line). The AI remembers recent conversation context.</td></tr>
+          <tr><td><strong>Tab Context</strong></td><td>Ask questions about the page you are currently viewing in the active browser tab. The AI analyzes the page content and answers based on it.</td></tr>
+          <tr><td><strong>Cross-Page</strong></td><td>Paste content or URLs from multiple pages (one per section) and ask the AI to compare, summarize, or find differences between them.</td></tr>
+          <tr><td><strong>Debate</strong></td><td>Enter a topic and multiple perspectives (one per line). The AI presents arguments from each viewpoint, helping you explore complex topics.</td></tr>
+        </table>
+
+        <h3>Pro Tips</h3>
+        <ul>
+          <li>Ollama must be running for AI features to work. See the "Setting Up Ollama" section below.</li>
+          <li>For best results, use smaller models like <code>llama3.2:3b</code> or <code>phi4:latest</code> for faster responses</li>
+          <li>The status indicator at the top shows whether Ollama is connected (green) or not (yellow)</li>
+        </ul>
+      </section>
+
+      <section id="identity" class="card-section">
+        <h2>Passwordless Identity <span class="badge">about:identity</span></h2>
+        <p>Passwordless Identity uses Ed25519 cryptographic key pairs to let you log into websites without passwords. Your private keys never leave your device &mdash; they are stored securely in the browser's NSS certificate store.</p>
+
+        <h3>Tabs Explained</h3>
+        <table>
+          <tr><td><strong>Dashboard</strong></td><td>Shows an overview of your identities and granted site permissions at a glance.</td></tr>
+          <tr><td><strong>My Identities</strong></td><td>Create named identities, each with its own Ed25519 key pair. Enter a name (e.g., "Personal", "Work", "Gaming") and click "+ Create Identity". Each identity gets a unique Decentralized Identifier (DID). You can delete identities you no longer need.</td></tr>
+          <tr><td><strong>Permissions</strong></td><td>Shows which websites have been granted access to your identities. You can revoke permissions at any time.</td></tr>
+        </table>
+
+        <h3>Pro Tips</h3>
+        <ul>
+          <li>Create separate identities for different contexts (personal, work, anonymous) to compartmentalize your online presence</li>
+          <li>Your cryptographic keys are generated using NSS and stored in your browser's certificate store &mdash; they never leave your device</li>
+          <li>When a website supports passwordless login, the browser automatically detects the login field and offers to authenticate using your identity</li>
+        </ul>
+      </section>
+
+      <section id="provenance" class="card-section">
+        <h2>Trust OS &mdash; Provenance <span class="badge">about:provenance</span></h2>
+        <p>Trust OS automatically extracts factual claims from pages you visit using a local AI model (Ollama). It tracks claims across different sources, compares how different publications report the same fact, and analyzes how information spreads across the web.</p>
+
+        <h3>Tabs Explained</h3>
+        <table>
+          <tr><td><strong>Claims</strong></td><td>Browse all extracted claims. Each claim shows the text, source URL, domain, and a confidence score (0-100%). Use the search bar to find specific claims by keyword.</td></tr>
+          <tr><td><strong>Compare Sources</strong></td><td>Enter a claim ID to see every source that mentions it, side by side. This helps you verify if a claim is consistently reported across different publications.</td></tr>
+          <tr><td><strong>Spread Analysis</strong></td><td>Track how a claim moves across domains over time. See where a claim originated and which domains picked it up later.</td></tr>
+          <tr><td><strong>Stats</strong></td><td>View total claims extracted and database health information.</td></tr>
+        </table>
+
+        <h3>Pro Tips</h3>
+        <ul>
+          <li>Claims are automatically extracted from pages you visit &mdash; no manual effort required</li>
+          <li>Claim IDs are shown on each claim card. Copy the ID to use in Compare Sources or Spread Analysis</li>
+          <li>Higher confidence scores mean the AI is more certain about the extraction. Scores above 80% are generally reliable</li>
+        </ul>
+      </section>
+
+      <section id="doda" class="card-section">
+        <h2>Doda Intelligence Hub <span class="badge">about:doda</span></h2>
+        <p>The Doda Intelligence Hub is the unified command center for all Doda services. It provides a single dashboard plus a global Command Palette accessible from any page.</p>
+
+        <h3>Tabs Explained</h3>
+        <table>
+          <tr><td><strong>Overview</strong></td><td>Shows stats from all services: pages indexed, claims extracted, and identities created.</td></tr>
+          <tr><td><strong>Knowledge Graph</strong></td><td>Quick search of your knowledge graph without navigating to the full about:knowledgegraph page.</td></tr>
+          <tr><td><strong>AI</strong></td><td>Quick chat with the AI from the hub interface.</td></tr>
+          <tr><td><strong>Identity</strong></td><td>View your identities from the hub.</td></tr>
+          <tr><td><strong>Provenance</strong></td><td>Quick search of claims from the hub.</td></tr>
+        </table>
+
+        <h3>Command Palette</h3>
+        <p>Press <kbd>Ctrl+K</kbd> or <kbd>Ctrl+Shift+,</kbd> from any page to open the Command Palette. Type a command and press Enter to execute:</p>
+        <ul>
+          <li><code>kg:search &lt;query&gt;</code> &mdash; Search the Knowledge Graph</li>
+          <li><code>kg:clear</code> &mdash; Clear all Knowledge Graph data</li>
+          <li><code>pv:search &lt;query&gt;</code> &mdash; Search Provenance claims</li>
+          <li><code>pv:clear</code> &mdash; Clear all Provenance data</li>
+          <li><code>ai:chat &lt;message&gt;</code> &mdash; Chat with the AI</li>
+          <li><code>ai:clear</code> &mdash; Clear AI chat history</li>
+          <li><code>id:create &lt;name&gt;</code> &mdash; Create a new identity</li>
+        </ul>
+      </section>
+
+      <section id="ollama" class="card-section">
+        <h2>Setting Up Ollama</h2>
+        <p>Ollama provides the local AI backend for both Contextual AI and Trust OS (Provenance). Follow these steps to get it running:</p>
+
+        <h3>Installation</h3>
+        <ol>
+          <li><strong>Linux:</strong> <code>curl -fsSL https://ollama.com/install.sh | sh</code></li>
+          <li><strong>macOS:</strong> Download from <a href="https://ollama.com/download">ollama.com/download</a></li>
+          <li><strong>Windows:</strong> Download from <a href="https://ollama.com/download">ollama.com/download</a></li>
+        </ol>
+
+        <h3>Running Ollama</h3>
+        <ol>
+          <li>Start the Ollama service: <code>ollama serve</code> (runs in the background on port 11434)</li>
+          <li>Pull a model: <code>ollama pull llama3.2:3b</code> (recommended for most systems)</li>
+          <li>Verify it works: <code>ollama run llama3.2:3b "Hello, world!"</code></li>
+        </ol>
+
+        <h3>Recommended Models</h3>
+        <table>
+          <tr><td><strong>llama3.2:3b</strong></td><td>Fast, small (2GB), good for most tasks &mdash; recommended for daily use</td></tr>
+          <tr><td><strong>phi4:latest</strong></td><td>Microsoft's Phi-4 (14B via Q4 quant), ~4GB, better reasoning</td></tr>
+          <tr><td><strong>mistral:7b</strong></td><td>Good balance of speed and quality, ~4.1GB</td></tr>
+          <tr><td><strong>llama3.2:1b</strong></td><td>Very fast and tiny (0.6GB), suitable for low-resource systems</td></tr>
+        </table>
+
+        <div class="info-box">
+          <p><strong>Auto-start on Linux:</strong> If installed via the script, Ollama runs as a systemd service and starts automatically on boot.</p>
+          <p><strong>Check status:</strong> Visit <code>about:ai</code> &mdash; the status indicator at the top shows green if Ollama is connected.</p>
+        </div>
+      </section>
+
+      <section id="tips" class="card-section">
+        <h2>Tips &amp; Keyboard Shortcuts</h2>
+
+        <h3>Global Shortcuts</h3>
+        <table>
+          <tr><td><kbd>Ctrl+K</kbd></td><td>Open Doda Command Palette (from any page)</td></tr>
+          <tr><td><kbd>Ctrl+Shift+,</kbd></td><td>Alternate shortcut for Command Palette</td></tr>
+        </table>
+
+        <h3>Quick Navigation</h3>
+        <table>
+          <tr><td><code>about:knowledgegraph</code></td><td>Knowledge Graph full page</td></tr>
+          <tr><td><code>about:ai</code></td><td>Contextual AI full page</td></tr>
+          <tr><td><code>about:identity</code></td><td>Passwordless Identity</td></tr>
+          <tr><td><code>about:provenance</code></td><td>Trust OS (Provenance)</td></tr>
+          <tr><td><code>about:doda</code></td><td>Doda Intelligence Hub</td></tr>
+        </table>
+
+        <h3>Best Practices</h3>
+        <ul>
+          <li><strong>Privacy first:</strong> All services run locally. No data leaves your device unless you explicitly share it.</li>
+          <li><strong>Knowledge Graph:</strong> Browse normally &mdash; pages are indexed automatically. No configuration needed.</li>
+          <li><strong>AI:</strong> Keep Ollama running in the background (<code>ollama serve</code>) for instant access.</li>
+          <li><strong>Identity:</strong> Create multiple identities for different contexts. Keep your personal and work identities separate.</li>
+          <li><strong>Provenance:</strong> Claims are extracted automatically. Check the Claims tab after browsing news sites to see what was extracted.</li>
+        </ul>
+
+        <div class="info-box tagline-box">
+          <p class="tagline">&#9733; Unique concept of Doda Browser &mdash; No other browser gives you memory, identity, truth, and intelligence built in. We are reimagining what a browser can be.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Doda Browser &mdash; Built on Mozilla Firefox. Privacy-first. Local-first. You-first.</p>
+    </footer>
+  </div>
+  <script src="chrome://tutorial/content/aboutTutorial.js"></script>
+</body>
+</html>

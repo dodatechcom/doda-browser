@@ -1,0 +1,5 @@
+# Doda developer build
+ac_add_options --disable-optimize
+ac_add_options --enable-debug-symbols
+ac_add_options --with-branding=browser/branding/unofficial
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-x86_64-pc-linux-gnu

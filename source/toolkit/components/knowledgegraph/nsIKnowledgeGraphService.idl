@@ -1,0 +1,21 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+[scriptable, uuid(f3a8b4c0-5d7e-4a1b-9c2d-8e6f7a3b0c1d)]
+interface nsIKnowledgeGraphService : nsISupports
+{
+  void indexPage(in AUTF8String url, in AUTF8String title, in AUTF8String textContent, in AUTF8String visitedAt);
+
+  AUTF8String search(in AUTF8String query, in unsigned long maxResults);
+
+  AUTF8String getRelated(in AUTF8String url, in unsigned long maxResults);
+
+  AUTF8String getRecent(in unsigned long maxResults);
+
+  unsigned long getPageCount();
+
+  void clear();
+};

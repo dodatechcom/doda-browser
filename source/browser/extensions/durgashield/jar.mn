@@ -1,0 +1,18 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+browser.jar:
+    builtin-addons/durgashield/background.js (background.js)
+    builtin-addons/durgashield/content.js (content.js)
+    builtin-addons/durgashield/donations.html (donations.html)
+    builtin-addons/durgashield/donations.js (donations.js)
+    builtin-addons/durgashield/icons/ (icons/**)
+    builtin-addons/durgashield/manifest.json (manifest.json)
+    builtin-addons/durgashield/popup.html (popup.html)
+    builtin-addons/durgashield/popup.js (popup.js)
+    builtin-addons/durgashield/privacy.html (privacy.html)
+    builtin-addons/durgashield/resources/ (resources/**)
+    builtin-addons/durgashield/rules/ (rules/**)
+    builtin-addons/durgashield/settings.html (settings.html)
+    builtin-addons/durgashield/settings.js (settings.js)

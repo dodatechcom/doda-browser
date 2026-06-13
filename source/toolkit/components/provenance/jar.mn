@@ -1,0 +1,9 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+provenance.jar:
+% content provenance %content/ contentaccessible=yes
+  content/aboutProvenance.js      (content/aboutProvenance.js)
+  content/aboutProvenance.html    (content/aboutProvenance.html)
+  content/aboutProvenance.css     (content/aboutProvenance.css)

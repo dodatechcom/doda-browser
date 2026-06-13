@@ -1,0 +1,28 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+XPIDL_SOURCES += [
+    "nsIAIEngineService.idl",
+]
+XPIDL_MODULE = "aiengine"
+
+EXPORTS += [
+    "AIEngine.h",
+]
+
+UNIFIED_SOURCES += [
+    "AIEngine.cpp",
+]
+
+EXTRA_JS_MODULES += [
+    "AIEngine.sys.mjs",
+    "AIEngineChild.sys.mjs",
+    "AIEngineParent.sys.mjs",
+]
+
+XPCOM_MANIFESTS += ["components.conf"]
+
+JAR_MANIFESTS += ["jar.mn"]
+
+FINAL_LIBRARY = "xul"

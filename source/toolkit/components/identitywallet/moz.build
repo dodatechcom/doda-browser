@@ -1,0 +1,28 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+XPIDL_SOURCES += [
+    "nsIIdentityWalletService.idl",
+]
+XPIDL_MODULE = "identitywallet"
+
+EXPORTS += [
+    "IdentityWallet.h",
+]
+
+UNIFIED_SOURCES += [
+    "IdentityWallet.cpp",
+]
+
+EXTRA_JS_MODULES += [
+    "IdentityWallet.sys.mjs",
+    "IdentityWalletChild.sys.mjs",
+    "IdentityWalletParent.sys.mjs",
+]
+
+XPCOM_MANIFESTS += ["components.conf"]
+
+JAR_MANIFESTS += ["jar.mn"]
+
+FINAL_LIBRARY = "xul"

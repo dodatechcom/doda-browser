@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Permission Inspector</title>
+  <link rel="stylesheet" href="chrome://permissions/content/aboutPermissions.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-brand">
+        <h1>Permission Inspector</h1>
+        <p class="subtitle">Every permission every website has requested, in one place.</p>
+      </div>
+      <button id="btn-refresh" onclick="refreshList()">&#x21bb; Refresh</button>
+    </header>
+    <div id="summary"></div>
+    <div id="content"></div>
+  </div>
+  <script src="chrome://permissions/content/aboutPermissions.js"></script>
+</body>
+</html>

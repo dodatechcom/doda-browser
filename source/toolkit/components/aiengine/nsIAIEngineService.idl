@@ -1,0 +1,29 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+[scriptable, uuid(d4e5f6a0-1b2c-3d4e-5f6a-7b8c9d0e1f2a)]
+interface nsIAIEngineService : nsISupports
+{
+  boolean checkHealth();
+
+  AUTF8String chat(in AUTF8String message, in AUTF8String history);
+
+  AUTF8String analyzeTab(in AUTF8String pageContent, in AUTF8String prompt);
+
+  AUTF8String crossPage(in AUTF8String pages, in AUTF8String prompt);
+
+  AUTF8String debate(in AUTF8String topic, in AUTF8String perspectives);
+
+  void clearHistory();
+
+  AUTF8String getHistory(in unsigned long limit);
+
+  AUTF8String getModels();
+
+  void setModel(in AUTF8String model);
+
+  AUTF8String getModel();
+};

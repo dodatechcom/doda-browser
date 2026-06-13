@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Knowledge Graph</title>
+  <link rel="stylesheet" href="chrome://knowledgegraph/content/aboutKnowledgeGraph.css" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-brand">
+        <span class="header-icon">&#9673;</span>
+        <div>
+          <h1>Knowledge Graph</h1>
+          <p class="subtitle">Your browsing history, intelligently indexed and searchable</p>
+        </div>
+      </div>
+      <div id="statusBar">
+        <span id="pageCount">0</span> pages indexed
+        <span id="dbStatus"></span>
+      </div>
+    </header>
+
+    <nav id="tabs">
+      <button class="tab active" data-tab="search">Search</button>
+      <button class="tab" data-tab="recent">Recent</button>
+      <button class="tab" data-tab="stats">Stats</button>
+    </nav>
+
+    <main>
+      <section id="panel-search" class="panel active">
+        <div class="panel-header">
+          <h2>Search</h2>
+          <span class="panel-desc">Full-text search across every page you've visited</span>
+        </div>
+        <div class="search-row">
+          <input type="text" id="searchInput" placeholder="Search your browsing history... (supports FTS5 syntax)">
+          <button id="searchBtn">Search</button>
+        </div>
+        <div id="searchResults" class="results-list"></div>
+      </section>
+
+      <section id="panel-recent" class="panel">
+        <div class="panel-header">
+          <h2>Recent Pages</h2>
+          <span class="panel-desc">Pages you've visited recently, indexed automatically</span>
+        </div>
+        <div id="recentList" class="results-list"></div>
+      </section>
+
+      <section id="panel-stats" class="panel">
+        <div class="panel-header">
+          <h2>Database Statistics</h2>
+          <span class="panel-desc">Overview of your knowledge graph</span>
+        </div>
+        <div id="statsContent">
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-value" id="statPageCount">0</div>
+              <div class="stat-label">Pages Indexed</div>
+            </div>
+          </div>
+          <button id="clearBtn" class="btn-danger">Clear All Data</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="help-section">
+      <div class="help-content">
+        <h3>About Knowledge Graph</h3>
+        <p>The Knowledge Graph automatically indexes every page you visit using full-text search (FTS5). You can search across your entire browsing history by keyword, phrase, or content — even for pages you visited weeks ago.</p>
+        <ul>
+          <li><strong>Search</strong> &mdash; Find pages by content, title, or URL using full-text queries</li>
+          <li><strong>Recent</strong> &mdash; Browse your most recently visited pages in reverse chronological order</li>
+          <li><strong>Stats</strong> &mdash; View database statistics and manage stored data</li>
+        </ul>
+        <p class="tagline">&#9733; Unique concept of Doda Browser &mdash; Your browser remembers what matters, so you don't have to.</p>
+      </div>
+    </footer>
+  </div>
+  <script src="chrome://knowledgegraph/content/aboutKnowledgeGraph.js"></script>
+</body>
+</html>

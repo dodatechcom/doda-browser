@@ -1,0 +1,35 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+[scriptable, uuid(2a4b8c1d-3e5f-4a6b-9c7d-8e1f2a3b4c5d)]
+interface nsIIdentityWalletService : nsISupports
+{
+  AUTF8String createIdentity(in AUTF8String name);
+
+  AUTF8String listIdentities();
+
+  void deleteIdentity(in AUTF8String did);
+
+  AUTF8String sign(in AUTF8String did, in AUTF8String message);
+
+  boolean verify(in AUTF8String did, in AUTF8String message, in AUTF8String signature);
+
+  void grantSitePermission(in AUTF8String did, in AUTF8String site);
+
+  void revokeSitePermission(in AUTF8String did, in AUTF8String site);
+
+  AUTF8String listSitePermissions();
+
+  AUTF8String getActiveLogin(in AUTF8String site);
+
+  void setActiveLogin(in AUTF8String site, in AUTF8String did);
+
+  void clearLogin(in AUTF8String site);
+
+  AUTF8String getLoginName(in AUTF8String did);
+
+  void setLoginName(in AUTF8String did, in AUTF8String name);
+};

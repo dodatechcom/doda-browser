@@ -1,0 +1,19 @@
+# Upstream Firefox source (clone of mozilla-central) — excluded from repo
+firefox-source/
+firefox-source.broken/
+
+# Build artifacts and logs
+*.log
+obj-x86_64-pc-linux-gnu/
+
+# Local dev
+llvm-bin/
+mach.save
+screenshot/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
