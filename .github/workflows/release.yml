@@ -198,20 +198,14 @@ jobs:
           fi
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "Using sdkmanager: $SDKMANAGER"
-          # Install NDK r29 (need JDK 17+ for sdkmanager, even with SKIP_JDK_VERSION_CHECK)
-          echo "Setting JAVA_HOME to JDK 17 for sdkmanager..."
-          export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-          # If java points to JDK 11, find JDK 17
-          if [ "$($JAVA_HOME/bin/java -version 2>&1 | head -1 | grep -o 'version \"[0-9]*\"' | grep -o '[0-9]*')" != "17" ]; then
-            for d in /usr/lib/jvm/java-17-openjdk-* /usr/lib/jvm/java-1.17*; do
-              if [ -f "$d/bin/java" ]; then JAVA_HOME="$d"; break; fi
-            done
+          # Install NDK r29 (sdkmanager too old to know about it, download directly)
+          echo "Downloading NDK r29 directly..."
+          wget -q https://dl.google.com/android/repository/android-ndk-r29-linux.zip -O /tmp/ndk-r29.zip
+          mkdir -p "$ANDROID_SDK_ROOT/ndk"
+          unzip -q /tmp/ndk-r29.zip -d "$ANDROID_SDK_ROOT/ndk/"
+          if [ -d "$ANDROID_SDK_ROOT/ndk/android-ndk-r29" ]; then
+            mv "$ANDROID_SDK_ROOT/ndk/android-ndk-r29" "$ANDROID_SDK_ROOT/ndk/29.0.0"
           fi
-          echo "Using JAVA_HOME=$JAVA_HOME"
-          echo "Installing NDK r29..."
-          export SKIP_JDK_VERSION_CHECK=1
-          yes "" | "$SDKMANAGER" --install "ndk;29.0.0" 2>&1
-          # Verify
           if [ -d "$ANDROID_SDK_ROOT/ndk/29.0.0" ]; then
             echo "NDK r29 installed successfully"
             echo "ANDROID_NDK=$ANDROID_SDK_ROOT/ndk/29.0.0" >> $GITHUB_ENV
