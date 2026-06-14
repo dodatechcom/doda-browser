@@ -188,32 +188,23 @@ jobs:
         run: |
           cd firefox-source
           yes "" | ./mach bootstrap --application="GeckoView/Firefox for Android" 2>&1
-          # Find Android SDK (mach bootstrap installs to ~/.mozbuild/)
-          ANDROID_SDK_ROOT=""
-          for d in "$HOME/.mozbuild/android-sdk" "$HOME/Android/Sdk"; do
-            if [ -d "$d" ]; then ANDROID_SDK_ROOT="$d"; break; fi
-          done
-          if [ -z "$ANDROID_SDK_ROOT" ]; then
-            echo "ERROR: Android SDK not found"
-            exit 1
-          fi
+          # Search for any existing Android SDK
+          echo "Searching for Android SDK..."
+          find /home/runner -name "sdkmanager" -type f 2>/dev/null | head -5
+          find /home/runner -type d -name "android-sdk" 2>/dev/null | head -5
+          find /home/runner -type d -name "Sdk" 2>/dev/null | head -5
+          # Install Android cmdline-tools and NDK
+          ANDROID_SDK_ROOT=$HOME/.mozbuild/android-sdk
+          mkdir -p "$ANDROID_SDK_ROOT"
+          echo "Downloading Android command-line tools..."
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
+          unzip -q /tmp/cmdline-tools.zip -d /tmp/cmdline-tools/
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+          mv /tmp/cmdline-tools/cmdline-tools "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-          echo "Android SDK found at: $ANDROID_SDK_ROOT"
-          # Find sdkmanager
-          SDKMANAGER=""
-          for p in \
-            "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
-            "$ANDROID_SDK_ROOT/tools/bin/sdkmanager"; do
-            if [ -x "$p" ]; then SDKMANAGER="$p"; break; fi
-          done
-          if [ -z "$SDKMANAGER" ]; then
-            echo "ERROR: sdkmanager not found. Listing SDK root:"
-            find "$ANDROID_SDK_ROOT" -name "sdkmanager" 2>/dev/null
-            exit 1
-          fi
-          # Install NDK r29
-          echo "Installing NDK r29 using: $SDKMANAGER"
-          yes "" | "$SDKMANAGER" --install "ndk;29.0.0" 2>&1
+          echo "Installing NDK r29..."
+          yes "" | sdkmanager --install "ndk;29.0.0" 2>&1
           # Verify
           if [ -d "$ANDROID_SDK_ROOT/ndk/29.0.0" ]; then
             echo "NDK r29 installed successfully"
