@@ -85,7 +85,7 @@ jobs:
           # Install mercurial via pip (Python is pre-installed on the runner)
           pip install mercurial
           # Install remaining tools via choco
-          foreach ($pkg in @("nasm", "python3", "mozilla-build")) {
+          foreach ($pkg in @("nasm", "python3")) {
             $attempt = 0
             do {
               Write-Host "Installing $pkg (attempt $($attempt + 1)/3)..."
@@ -99,6 +99,14 @@ jobs:
               exit 1
             }
           }
+          # Download and install MozillaBuild (not available on Chocolatey)
+          Write-Host "Downloading MozillaBuild..."
+          $url = "https://ftp.mozilla.org/pub/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe"
+          $out = "$env:TEMP\MozillaBuildSetup.exe"
+          (New-Object System.Net.WebClient).DownloadFile($url, $out)
+          Write-Host "Installing MozillaBuild..."
+          Start-Process -Wait -FilePath $out -ArgumentList "/S /D=C:\mozilla-build"
+          Write-Host "MozillaBuild installed"
         shell: powershell
 
       - name: Setup Rust
@@ -179,24 +187,33 @@ jobs:
       - name: Bootstrap Android SDK
         run: |
           cd firefox-source
-          export ANDROID_SDK_ROOT=$HOME/Android/Sdk
-          yes | ./mach bootstrap --application="GeckoView/Firefox for Android" 2>&1
+          yes "" | ./mach bootstrap --application="GeckoView/Firefox for Android" 2>&1
+          # Find Android SDK (mach bootstrap installs to ~/.mozbuild/)
+          ANDROID_SDK_ROOT=""
+          for d in "$HOME/.mozbuild/android-sdk" "$HOME/Android/Sdk"; do
+            if [ -d "$d" ]; then ANDROID_SDK_ROOT="$d"; break; fi
+          done
+          if [ -z "$ANDROID_SDK_ROOT" ]; then
+            echo "ERROR: Android SDK not found"
+            exit 1
+          fi
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "Android SDK found at: $ANDROID_SDK_ROOT"
           # Find sdkmanager
           SDKMANAGER=""
           for p in \
             "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
-            "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager" \
             "$ANDROID_SDK_ROOT/tools/bin/sdkmanager"; do
             if [ -x "$p" ]; then SDKMANAGER="$p"; break; fi
           done
           if [ -z "$SDKMANAGER" ]; then
-            echo "ERROR: sdkmanager not found at any expected path"
-            ls -la "$ANDROID_SDK_ROOT" 2>/dev/null || echo "SDK root missing"
+            echo "ERROR: sdkmanager not found. Listing SDK root:"
+            find "$ANDROID_SDK_ROOT" -name "sdkmanager" 2>/dev/null
             exit 1
           fi
           # Install NDK r29
           echo "Installing NDK r29 using: $SDKMANAGER"
-          yes | "$SDKMANAGER" --install "ndk;29.0.0" 2>&1
+          yes "" | "$SDKMANAGER" --install "ndk;29.0.0" 2>&1
           # Verify
           if [ -d "$ANDROID_SDK_ROOT/ndk/29.0.0" ]; then
             echo "NDK r29 installed successfully"
