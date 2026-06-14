@@ -1,5 +1,5 @@
 # Doda release build (Android ARM64)
-ac_add_options --enable-project=mobile/android/geckoview
+ac_add_options --enable-project=mobile/android
 ac_add_options --target=aarch64-linux-android
 ac_add_options --enable-optimize="-O2"
 ac_add_options --disable-debug

@@ -80,6 +80,7 @@ jobs:
           choco install mercurial --yes
           choco install nasm --yes
           choco install python3 --yes
+          choco install mozilla-build --yes
         shell: powershell
 
       - name: Setup Rust
