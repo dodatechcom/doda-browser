@@ -118,7 +118,10 @@ jobs:
 
       - name: Install deps
         run: |
-          choco install mercurial nasm python3 -y
+          choco install mercurial --yes
+          choco install nasm --yes
+          choco install python3 --yes
+        shell: powershell
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
