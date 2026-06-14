@@ -152,6 +152,64 @@ jobs:
           name: doda-windows
           path: doda-browser-windows-x86_64.zip
 
+  build-android:
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: doda
+
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mercurial nasm openjdk-17-jdk \
+            libgtk-3-dev libasound2-dev libpulse-dev
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - name: Install cbindgen
+        run: cargo install cbindgen
+
+      - name: Setup clang
+        run: |
+          wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz -O /tmp/clang.tar.xz
+          tar xf /tmp/clang.tar.xz -C /tmp
+          echo "/tmp/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
+
+      - name: Clone mozilla-unified
+        run: hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+
+      - name: Apply Doda overlay
+        run: |
+          cp -a doda/source/* firefox-source/
+          cp firefox-source/mozconfig-release-android firefox-source/mozconfig
+
+      - name: Bootstrap Android SDK
+        run: |
+          cd firefox-source
+          ./mach bootstrap --application=mobile/android --no-interactive 2>&1 || echo "Bootstrap may have partial failures"
+
+      - name: Build GeckoView
+        run: |
+          cd firefox-source
+          ./mach build 2>&1
+
+      - name: Package
+        run: |
+          cd firefox-source/obj-release-android/dist/
+          tar cjf ../../../doda-browser-android-aarch64.tar.bz2 \
+            --exclude="*.o" --exclude="*.a" .
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: doda-android
+          path: doda-browser-android-aarch64.tar.bz2
+
   create-release:
     needs: [build-linux, build-macos, build-windows]
     runs-on: ubuntu-22.04
