@@ -52,6 +52,7 @@ jobs:
       - name: Build
         run: |
           cd firefox-source
+          cargo fetch
           ./mach build 2>&1
 
       - name: Package
@@ -94,6 +95,7 @@ jobs:
       - name: Build
         run: |
           cd firefox-source
+          cargo fetch
           ./mach build 2>&1
 
       - name: Package
@@ -141,6 +143,7 @@ jobs:
       - name: Build
         run: |
           cd firefox-source
+          cargo fetch
           ./mach build 2>&1
 
       - name: Package
@@ -199,6 +202,7 @@ jobs:
       - name: Build GeckoView
         run: |
           cd firefox-source
+          cargo fetch
           ./mach build 2>&1
 
       - name: Package
