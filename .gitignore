@@ -5,6 +5,12 @@ firefox-source.broken/
 # Build artifacts and logs
 *.log
 obj-x86_64-pc-linux-gnu/
+obj-release/
+obj-*/
+
+# Release output
+releases/
+build-release.sh
 
 # Local dev
 llvm-bin/

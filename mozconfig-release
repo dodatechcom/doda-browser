@@ -1,0 +1,8 @@
+# Doda release build
+ac_add_options --enable-optimize="-O2 -D_FORTIFY_SOURCE=2"
+ac_add_options --enable-release
+ac_add_options --enable-strip
+ac_add_options --disable-debug
+ac_add_options --with-branding=browser/branding/unofficial
+ac_add_options --disable-updater
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-release
