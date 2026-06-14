@@ -188,23 +188,19 @@ jobs:
         run: |
           cd firefox-source
           yes "" | ./mach bootstrap --application="GeckoView/Firefox for Android" 2>&1
-          # Search for any existing Android SDK
-          echo "Searching for Android SDK..."
-          find /home/runner -name "sdkmanager" -type f 2>/dev/null | head -5
-          find /home/runner -type d -name "android-sdk" 2>/dev/null | head -5
-          find /home/runner -type d -name "Sdk" 2>/dev/null | head -5
-          # Install Android cmdline-tools and NDK
-          ANDROID_SDK_ROOT=$HOME/.mozbuild/android-sdk
-          mkdir -p "$ANDROID_SDK_ROOT"
-          echo "Downloading Android command-line tools..."
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
-          unzip -q /tmp/cmdline-tools.zip -d /tmp/cmdline-tools/
-          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
-          mv /tmp/cmdline-tools/cmdline-tools "$ANDROID_SDK_ROOT/cmdline-tools/latest"
-          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+          # Use the Android SDK that bootstrap already installed
+          ANDROID_SDK_ROOT=$HOME/.mozbuild/android-sdk-linux
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/20.0/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            echo "ERROR: sdkmanager not found at $SDKMANAGER"
+            find "$HOME/.mozbuild" -name "sdkmanager" -type f 2>/dev/null
+            exit 1
+          fi
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "Using sdkmanager: $SDKMANAGER"
+          # Install NDK r29
           echo "Installing NDK r29..."
-          yes "" | sdkmanager --install "ndk;29.0.0" 2>&1
+          yes "" | "$SDKMANAGER" --install "ndk;29.0.0" 2>&1
           # Verify
           if [ -d "$ANDROID_SDK_ROOT/ndk/29.0.0" ]; then
             echo "NDK r29 installed successfully"
