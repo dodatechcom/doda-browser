@@ -180,7 +180,7 @@ jobs:
         run: |
           cd firefox-source
           export ANDROID_SDK_ROOT=$HOME/Android/Sdk
-          ./mach bootstrap --application="GeckoView/Firefox for Android" --no-interactive 2>&1 || echo "Bootstrap may have partial failures"
+          yes | ./mach bootstrap --application="GeckoView/Firefox for Android" 2>&1
           # Find sdkmanager
           SDKMANAGER=""
           for p in \
