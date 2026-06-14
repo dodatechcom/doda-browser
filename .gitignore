@@ -23,3 +23,9 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Accidentally committed — local dev artifacts
+gitkey
+gitkey.pub
+pkgconfig/
+designs/
