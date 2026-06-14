@@ -77,10 +77,16 @@ jobs:
 
       - name: Install deps
         run: |
-          choco install mercurial --yes
-          choco install nasm --yes
-          choco install python3 --yes
-          choco install mozilla-build --yes
+          choco upgrade chocolatey -y
+          $packages = @("mercurial", "nasm", "python3", "mozilla-build")
+          foreach ($pkg in $packages) {
+            $attempt = 0
+            do {
+              choco install $pkg --yes --no-progress --pre
+              $attempt++
+              if ($LASTEXITCODE -ne 0 -and $attempt -lt 3) { Start-Sleep -Seconds 5 }
+            } while ($LASTEXITCODE -ne 0 -and $attempt -lt 3)
+          }
         shell: powershell
 
       - name: Setup Rust
@@ -156,6 +162,13 @@ jobs:
         run: |
           cd firefox-source
           ./mach bootstrap --application="GeckoView/Firefox for Android" --no-interactive 2>&1 || echo "Bootstrap may have partial failures"
+          # Install correct NDK version (r29)
+          export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+          if [ -f "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ]; then
+            $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --install "ndk;29.0.0" 2>&1 || true
+          elif [ -f "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager" ]; then
+            $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager --install "ndk;29.0.0" 2>&1 || true
+          fi
 
       - name: Build GeckoView
         run: |
