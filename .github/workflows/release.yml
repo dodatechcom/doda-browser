@@ -197,7 +197,7 @@ jobs:
       - name: Bootstrap Android SDK
         run: |
           cd firefox-source
-          ./mach bootstrap --application=mobile/android --no-interactive 2>&1 || echo "Bootstrap may have partial failures"
+          ./mach bootstrap --application="GeckoView/Firefox for Android" --no-interactive 2>&1 || echo "Bootstrap may have partial failures"
 
       - name: Build GeckoView
         run: |
