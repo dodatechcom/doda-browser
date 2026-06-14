@@ -41,8 +41,11 @@ jobs:
           tar xf /tmp/clang.tar.xz -C /tmp
           echo "/tmp/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
 
-      - name: Clone mozilla-unified
-        run: hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+      - name: Clone mozilla-central
+        run: |
+          hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+          cd firefox-source
+          hg update -r 71e37c8757f87e7682d7db7d9b9ec9f7f81e24f7
 
       - name: Apply Doda overlay
         run: |
@@ -95,8 +98,11 @@ jobs:
       - name: Install cbindgen
         run: cargo install cbindgen
 
-      - name: Clone mozilla-unified
-        run: hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+      - name: Clone mozilla-central
+        run: |
+          hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+          cd firefox-source
+          hg update -r 71e37c8757f87e7682d7db7d9b9ec9f7f81e24f7
 
       - name: Apply Doda overlay
         run: |
@@ -150,8 +156,11 @@ jobs:
           tar xf /tmp/clang.tar.xz -C /tmp
           echo "/tmp/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
 
-      - name: Clone mozilla-unified
-        run: hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+      - name: Clone mozilla-central
+        run: |
+          hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+          cd firefox-source
+          hg update -r 71e37c8757f87e7682d7db7d9b9ec9f7f81e24f7
 
       - name: Apply Doda overlay
         run: |
