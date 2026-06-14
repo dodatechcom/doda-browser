@@ -80,15 +80,30 @@ jobs:
 
       - name: Install deps
         run: |
-          choco upgrade chocolatey -y
+          choco upgrade chocolatey -y --no-progress
+          choco source add -n community -s "https://community.chocolatey.org/api/v2/" --force 2>&1 | Out-Null
           $packages = @("mercurial", "nasm", "python3", "mozilla-build")
+          $global:maxAttempts = 5
           foreach ($pkg in $packages) {
             $attempt = 0
+            $installed = $false
             do {
-              choco install $pkg --yes --no-progress --pre
-              $attempt++
-              if ($LASTEXITCODE -ne 0 -and $attempt -lt 3) { Start-Sleep -Seconds 5 }
-            } while ($LASTEXITCODE -ne 0 -and $attempt -lt 3)
+              Write-Host "Installing $pkg (attempt $($attempt + 1)/$maxAttempts)..."
+              & choco install $pkg --yes --no-progress --pre 2>&1
+              if ($LASTEXITCODE -eq 0) {
+                $installed = $true
+              } else {
+                $attempt++
+                if ($attempt -lt $maxAttempts) {
+                  Write-Host "Retrying $pkg in 10s..."
+                  Start-Sleep -Seconds 10
+                }
+              }
+            } while (-not $installed -and $attempt -lt $maxAttempts)
+            if (-not $installed) {
+              Write-Error "Failed to install $pkg after $maxAttempts attempts"
+              exit 1
+            }
           }
         shell: powershell
 
@@ -170,13 +185,32 @@ jobs:
       - name: Bootstrap Android SDK
         run: |
           cd firefox-source
-          ./mach bootstrap --application="GeckoView/Firefox for Android" --no-interactive 2>&1 || echo "Bootstrap may have partial failures"
-          # Install correct NDK version (r29)
           export ANDROID_SDK_ROOT=$HOME/Android/Sdk
-          if [ -f "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ]; then
-            $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --install "ndk;29.0.0" 2>&1 || true
-          elif [ -f "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager" ]; then
-            $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager --install "ndk;29.0.0" 2>&1 || true
+          ./mach bootstrap --application="GeckoView/Firefox for Android" --no-interactive 2>&1 || echo "Bootstrap may have partial failures"
+          # Find sdkmanager
+          SDKMANAGER=""
+          for p in \
+            "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager" \
+            "$ANDROID_SDK_ROOT/tools/bin/sdkmanager"; do
+            if [ -x "$p" ]; then SDKMANAGER="$p"; break; fi
+          done
+          if [ -z "$SDKMANAGER" ]; then
+            echo "ERROR: sdkmanager not found at any expected path"
+            ls -la "$ANDROID_SDK_ROOT" 2>/dev/null || echo "SDK root missing"
+            exit 1
+          fi
+          # Install NDK r29
+          echo "Installing NDK r29 using: $SDKMANAGER"
+          yes | "$SDKMANAGER" --install "ndk;29.0.0" 2>&1
+          # Verify
+          if [ -d "$ANDROID_SDK_ROOT/ndk/29.0.0" ]; then
+            echo "NDK r29 installed successfully"
+            echo "ANDROID_NDK=$ANDROID_SDK_ROOT/ndk/29.0.0" >> $GITHUB_ENV
+          else
+            echo "ERROR: NDK r29 installation failed"
+            ls -la "$ANDROID_SDK_ROOT/ndk/" 2>/dev/null
+            exit 1
           fi
 
       - name: Build GeckoView
