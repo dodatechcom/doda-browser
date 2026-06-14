@@ -68,49 +68,6 @@ jobs:
           name: doda-linux
           path: doda-browser-linux-x86_64.tar.bz2
 
-  build-macos:
-    runs-on: macos-13
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          path: doda
-
-      - name: Install deps
-        run: brew install mercurial nasm
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install cbindgen
-        run: cargo install cbindgen
-
-      - name: Clone mozilla-unified
-        run: hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
-
-      - name: Apply Doda overlay
-        run: |
-          cp -a doda/source/* firefox-source/
-          cp firefox-source/mozconfig-release-macos firefox-source/mozconfig
-
-      - name: Build
-        run: |
-          cd firefox-source
-          cargo fetch
-          ./mach build 2>&1
-
-      - name: Package
-        run: |
-          cd firefox-source/obj-release/dist/bin
-          tar cjf ../../../../doda-browser-macos-universal.tar.bz2 \
-            --exclude="*.o" --exclude="*.a" .
-          cd ../../../../
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: doda-macos
-          path: doda-browser-macos-universal.tar.bz2
-
   build-windows:
     runs-on: windows-2022
     steps:
@@ -218,7 +175,7 @@ jobs:
           path: doda-browser-android-aarch64.tar.bz2
 
   create-release:
-    needs: [build-linux, build-macos, build-windows]
+    needs: [build-linux, build-windows]
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -227,16 +184,13 @@ jobs:
       - name: Generate checksums
         run: |
           sha256sum doda-linux/doda-browser-linux-x86_64.tar.bz2 > doda-browser-linux-x86_64.tar.bz2.sha256
-          sha256sum doda-macos/doda-browser-macos-universal.tar.bz2 > doda-browser-macos-universal.tar.bz2.sha256
           sha256sum doda-windows/doda-browser-windows-x86_64.zip > doda-browser-windows-x86_64.zip.sha256
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             doda-linux/doda-browser-linux-x86_64.tar.bz2
-            doda-macos/doda-browser-macos-universal.tar.bz2
             doda-windows/doda-browser-windows-x86_64.zip
             doda-browser-linux-x86_64.tar.bz2.sha256
-            doda-browser-macos-universal.tar.bz2.sha256
             doda-browser-windows-x86_64.zip.sha256
           generate_release_notes: true

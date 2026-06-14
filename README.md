@@ -69,6 +69,28 @@ cd firefox-source
 ./mach build          # Subsequent: seconds to minutes
 ```
 
+### Build on macOS
+
+```bash
+# 1. Install prerequisites (requires Xcode or Xcode Command Line Tools)
+xcode-select --install
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install mercurial nasm
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# 2. Clone and build
+hg clone --stream https://hg.mozilla.org/mozilla-central firefox-source
+cp -a source/* firefox-source/
+cp source/mozconfig-release-macos firefox-source/mozconfig
+cd firefox-source
+cargo install cbindgen
+cargo fetch
+./mach build
+
+# 3. The .app bundle will be at:
+# firefox-source/obj-release/dist/Doda.app
+```
+
 ### Run
 
 ```bash
