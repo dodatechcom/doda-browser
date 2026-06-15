@@ -147,7 +147,6 @@ jobs:
 
   build-android:
     runs-on: ubuntu-22.04
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -234,7 +233,7 @@ jobs:
           path: doda-browser-android-aarch64.tar.bz2
 
   create-release:
-    needs: [build-linux, build-windows]
+    needs: [build-linux, build-windows, build-android]
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -244,12 +243,15 @@ jobs:
         run: |
           sha256sum doda-linux/doda-browser-linux-x86_64.tar.bz2 > doda-browser-linux-x86_64.tar.bz2.sha256
           sha256sum doda-windows/doda-browser-windows-x86_64.zip > doda-browser-windows-x86_64.zip.sha256
+          sha256sum doda-android/doda-browser-android-aarch64.tar.bz2 > doda-browser-android-aarch64.tar.bz2.sha256
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             doda-linux/doda-browser-linux-x86_64.tar.bz2
             doda-windows/doda-browser-windows-x86_64.zip
+            doda-android/doda-browser-android-aarch64.tar.bz2
             doda-browser-linux-x86_64.tar.bz2.sha256
             doda-browser-windows-x86_64.zip.sha256
+            doda-browser-android-aarch64.tar.bz2.sha256
           generate_release_notes: true
