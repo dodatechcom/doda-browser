@@ -18,7 +18,7 @@
 #include "pk11pub.h"
 #include "pk11priv.h"
 #include "cryptohi.h"
-#include "base64.h"
+#include "base64.h"  // our local implementation
 #include "hasht.h"
 #include "secerr.h"
 #include "nspr.h"
@@ -154,52 +154,46 @@ nsresult IdentityWallet::GenerateEd25519Key(nsACString& aPrivateKey,
   SECItem pubKeyBytes = pubKey->u.ec.publicValue;
 
   // Base64url encode both
-  char* privB64 = BTOA_ConvertItemToAscii(privKeyItem);
-  char* pubB64 = BTOA_ConvertItemToAscii(&pubKeyBytes);
+  nsCString privB64 = Base64Encode(
+      mozilla::Span(privKeyItem->data, privKeyItem->len));
+  nsCString pubB64 = Base64Encode(
+      mozilla::Span(pubKeyBytes.data, pubKeyBytes.len));
 
   aPrivateKey.Assign(privB64);
   aPublicKey.Assign(pubB64);
 
   // Derive DID: sha256(publicKey) → base64url prefix
+  uint8_t hashBuf[SHA256_LENGTH];
   SECItem hashItem;
-  hashItem.data = nullptr;
+  hashItem.data = hashBuf;
   hashItem.len = SHA256_LENGTH;
   PK11_HashBuf(SEC_OID_SHA256, hashItem.data, pubKeyBytes.data, pubKeyBytes.len);
 
-  char* idB64 = BTOA_ConvertItemToAscii(&hashItem);
-  aDID = nsPrintfCString("did:key:z%s", idB64);
+  nsCString idB64 = Base64Encode(
+      mozilla::Span(hashItem.data, hashItem.len));
+  aDID = nsPrintfCString("did:key:z%s", idB64.get());
 
-  PORT_Free(idB64);
-    PORT_Free(privB64);
-    PORT_Free(pubB64);
   SECITEM_FreeItem(privKeyItem, PR_TRUE);
-    SECKEY_DestroyPrivateKey(privKey);
-    SECKEY_DestroyPublicKey(pubKey);
+  SECKEY_DestroyPrivateKey(privKey);
+  SECKEY_DestroyPublicKey(pubKey);
   return NS_OK;
 }
 
 nsresult IdentityWallet::KeyToDID(const nsACString& aPublicKey,
                                   nsACString& aDID) {
   // Decode base64 public key
-  SECItem pubKeyItem;
-  pubKeyItem.data = nullptr;
-  pubKeyItem.len = 0;
-  if (ATOB_ConvertAsciiToItem(&pubKeyItem, PromiseFlatCString(aPublicKey).get()) != SECSuccess) {
+  nsTArray<uint8_t> pubKeyData = Base64Decode(aPublicKey);
+  if (pubKeyData.IsEmpty()) {
     return NS_ERROR_FAILURE;
   }
 
   // SHA-256 hash
-  SECItem hashItem;
-  hashItem.data = (unsigned char*)PORT_Alloc(SHA256_LENGTH);
-  hashItem.len = SHA256_LENGTH;
-  PK11_HashBuf(SEC_OID_SHA256, hashItem.data, pubKeyItem.data, pubKeyItem.len);
+  uint8_t hashBuf[SHA256_LENGTH];
+  PK11_HashBuf(SEC_OID_SHA256, hashBuf, pubKeyData.Elements(), pubKeyData.Length());
 
-  char* idB64 = BTOA_ConvertItemToAscii(&hashItem);
-  aDID = nsPrintfCString("did:key:z%s", idB64);
+  nsCString idB64 = Base64Encode(mozilla::Span(hashBuf, SHA256_LENGTH));
+  aDID = nsPrintfCString("did:key:z%s", idB64.get());
 
-  PORT_Free(idB64);
-  PORT_Free(hashItem.data);
-  SECITEM_FreeItem(&pubKeyItem, PR_FALSE);
   return NS_OK;
 }
 
@@ -338,19 +332,19 @@ IdentityWallet::Sign(const nsACString& aDID, const nsACString& aMessage,
   NS_ENSURE_SUCCESS(rv, rv);
 
   // Decode private key
-  SECItem privKeyItem;
-  privKeyItem.data = nullptr;
-  privKeyItem.len = 0;
-  if (ATOB_ConvertAsciiToItem(&privKeyItem, privKeyB64.get()) != SECSuccess) {
+  nsTArray<uint8_t> privKeyRaw = Base64Decode(privKeyB64);
+  if (privKeyRaw.IsEmpty()) {
     return NS_ERROR_FAILURE;
   }
+  SECItem privKeyItem;
+  privKeyItem.data = privKeyRaw.Elements();
+  privKeyItem.len = privKeyRaw.Length();
 
   // Import private key
   SECKEYPrivateKey* privKey = nullptr;
   SECStatus srv = PK11_ImportDERPrivateKeyInfoAndReturnKey(
       PK11_GetInternalSlot(), &privKeyItem, nullptr, nullptr, PR_FALSE,
       PR_FALSE, KU_ALL, &privKey, nullptr);
-  SECITEM_FreeItem(&privKeyItem, PR_FALSE);
 
   if (srv != SECSuccess || !privKey) {
     return NS_ERROR_FAILURE;
@@ -372,10 +366,9 @@ IdentityWallet::Sign(const nsACString& aDID, const nsACString& aMessage,
   }
 
   // Base64 encode signature
-  char* sigB64 = BTOA_ConvertItemToAscii(&signature);
+  nsCString sigB64 = Base64Encode(mozilla::Span(signature.data, signature.len));
   aResult.Assign(sigB64);
 
-  PORT_Free(sigB64);
   SECITEM_FreeItem(&signature, PR_FALSE);
   SECKEY_DestroyPrivateKey(privKey);
   return NS_OK;
@@ -412,29 +405,30 @@ IdentityWallet::Verify(const nsACString& aDID, const nsACString& aMessage,
   NS_ENSURE_SUCCESS(rv, rv);
 
   // Decode public key
-  SECItem pubKeyItem;
-  pubKeyItem.data = nullptr;
-  pubKeyItem.len = 0;
-  if (ATOB_ConvertAsciiToItem(&pubKeyItem, pubKeyB64.get()) != SECSuccess) {
+  nsTArray<uint8_t> pubKeyRaw = Base64Decode(pubKeyB64);
+  if (pubKeyRaw.IsEmpty()) {
     return NS_OK;
   }
+  SECItem pubKeyItem;
+  pubKeyItem.data = pubKeyRaw.Elements();
+  pubKeyItem.len = pubKeyRaw.Length();
 
   // Import public key
   SECKEYPublicKey* pubKey = SECKEY_ImportDERPublicKey(&pubKeyItem, SEC_OID_CURVE25519);
-  SECITEM_FreeItem(&pubKeyItem, PR_FALSE);
 
   if (!pubKey) {
     return NS_OK;
   }
 
   // Verify signature
-  SECItem signatureItem;
-  signatureItem.data = nullptr;
-  signatureItem.len = 0;
-  if (ATOB_ConvertAsciiToItem(&signatureItem, PromiseFlatCString(aSignature).get()) != SECSuccess) {
+  nsTArray<uint8_t> sigRaw = Base64Decode(aSignature);
+  if (sigRaw.IsEmpty()) {
     SECKEY_DestroyPublicKey(pubKey);
     return NS_OK;
   }
+  SECItem signatureItem;
+  signatureItem.data = sigRaw.Elements();
+  signatureItem.len = sigRaw.Length();
 
   SECItem msgItem;
   msgItem.data = (unsigned char*)PromiseFlatCString(aMessage).get();
@@ -444,7 +438,6 @@ IdentityWallet::Verify(const nsACString& aDID, const nsACString& aMessage,
       pubKey, CKM_EDDSA, nullptr, &signatureItem, &msgItem, nullptr);
   *aResult = (status == SECSuccess);
 
-  SECITEM_FreeItem(&signatureItem, PR_FALSE);
   SECKEY_DestroyPublicKey(pubKey);
   return NS_OK;
 }
